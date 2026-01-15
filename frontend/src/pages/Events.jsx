@@ -7,9 +7,10 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
 export default function Events() {
-  const [selectedDate, setSelectedDate] = useState("");
+  const today = new Date().toLocaleDateString("en-CA"); 
+  const [selectedDate, setSelectedDate] = useState(today);
   const [events, setEvents] = useState([]);
-  const [allEvents, setAllEvents] = useState([]); // To mark days with events
+  const [allEvents, setAllEvents] = useState([]); 
 
   const fetchEvents = async (date) => {
     if (!date) return;
@@ -19,7 +20,7 @@ export default function Events() {
 
   const fetchAllEvents = async () => {
     try {
-      const res = await getEventsByDate(""); // Fetch all events
+      const res = await getEventsByDate("");
       setAllEvents(res.data);
     } catch (err) {
       console.error(err);
@@ -34,20 +35,8 @@ export default function Events() {
     if (selectedDate) fetchEvents(selectedDate);
   }, [selectedDate]);
 
-  const today = new Date().toISOString().split("T")[0];
-
-  const upcomingEvents = events
-    .filter((event) => event.date >= today)
-    .sort((a, b) => {
-      if (a.date === b.date) {
-        return a.startTime.localeCompare(b.startTime);
-      }
-      return a.date.localeCompare(b.date);
-    });
-
   const isMobile = window.innerWidth < 640;
 
-  // Helper to check if a day has events
   const hasEvents = (dateStr) => {
     return allEvents.some((event) => event.date === dateStr);
   };
@@ -56,7 +45,6 @@ export default function Events() {
     <div className="p-6 max-w-6xl mx-auto">
       <h2 className="text-2xl font-bold mb-6">Upcoming Events</h2>
 
-      {/* Responsive layout: 2 columns on large screens, stacked on mobile */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Calendar Column */}
         <div className="bg-white rounded-lg shadow p-4">
@@ -65,7 +53,7 @@ export default function Events() {
             initialView="dayGridMonth"
             height="auto"
             headerToolbar={{
-              left: isMobile ? "prev" : "prev,next today",
+              left: isMobile ? "prev,next" : "prev,next today",
               center: "title",
               right: "",
             }}
