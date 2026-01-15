@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Events from "./pages/Events";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
-import "./app.css";
+import "./App.css";
 
 const ProtectedRoute = ({ children }) => {
   return localStorage.getItem("token") ? children : <Navigate to="/login" />;
