@@ -1,13 +1,35 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function Navbar() {
+const Navbar = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   return (
-    <nav className="navbar">
-      <h3>Event Scheduler</h3>
-      <div>
-        <Link to="/">Events</Link>
-        <Link to="/admin">Admin</Link>
-      </div>
+    <nav className="flex justify-between items-center px-6 py-4 border-b bg-white sticky top-0 z-50">
+      <Link to='/'><h1 className="text-xl font-bold">Event Scheduler</h1></Link>
+      {token ? (
+        <div>
+          <Link to="/admin" className="mr-4">
+            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              + Add Event
+            </button>
+          </Link>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={logout}>Logout</button>
+        </div>
+      ) : (
+        <Link to="/login">
+          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            + Add Event
+          </button>
+        </Link>
+      )}
     </nav>
   );
-}
+};
+
+export default Navbar;

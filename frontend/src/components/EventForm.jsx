@@ -10,6 +10,10 @@ export default function EventForm({ refresh }) {
     endTime: ""
   });
 
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
   const submit = async (e) => {
     e.preventDefault();
     try {
@@ -22,13 +26,15 @@ export default function EventForm({ refresh }) {
   };
 
   return (
-    <form onSubmit={submit} className="event-form">
-      <input placeholder="Title" onChange={e=>setForm({...form,title:e.target.value})} />
-      <input type="date" onChange={e=>setForm({...form,date:e.target.value})} />
-      <input type="time" onChange={e=>setForm({...form,startTime:e.target.value})} />
-      <input type="time" onChange={e=>setForm({...form,endTime:e.target.value})} />
-      <textarea placeholder="Description" onChange={e=>setForm({...form,description:e.target.value})} />
-      <button>Add Event</button>
+    <form onSubmit={submit} className="bg-white p-6 rounded-lg shadow space-y-4">
+      <input name="title" placeholder="Title" onChange={handleChange} className="input"/>
+      <input name="date" type="date" onChange={handleChange} className="input"/>
+      <input name="startTime" type="time" onChange={handleChange} className="input"/>
+      <input name="endTime" type="time" onChange={handleChange} className="input"/>
+      <textarea name="description" placeholder="Description" onChange={handleChange} className="input"/>
+      <button className="bg-indigo-600 text-white px-4 py-2 rounded">
+        Add Event
+      </button>
     </form>
   );
 }

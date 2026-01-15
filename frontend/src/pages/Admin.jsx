@@ -1,30 +1,13 @@
-import { useEffect, useState } from "react";
-import { getEventsByDate } from "../api/eventApi";
+import { useState } from "react";
 import EventForm from "../components/EventForm";
-import EventList from "../components/EventList";
 
 export default function Admin() {
-  const [date, setDate] = useState("");
-  const [events, setEvents] = useState([]);
-
-  const loadEvents = async () => {
-    if (!date) return;
-    const res = await getEventsByDate(date);
-    setEvents(res.data);
-  };
-
-  useEffect(() => {
-    loadEvents();
-  }, [date]);
+  const [refreshFlag, setRefreshFlag] = useState(false);
 
   return (
-    <>
-      <h2>Admin Dashboard</h2>
-
-      <input type="date" onChange={e => setDate(e.target.value)} />
-
-      <EventForm refresh={loadEvents} />
-      <EventList events={events} />
-    </>
+    <div className="p-6 max-w-5xl mx-auto space-y-6">
+      <h2 className="text-2xl font-bold">Admin Dashboard</h2>
+      <EventForm refresh={() => setRefreshFlag(!refreshFlag)} />
+    </div>
   );
 }

@@ -1,16 +1,33 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Admin from "./pages/Admin";
-import Events from "./pages/Events";
+import { BrowserRouter, Routes, Route, Navigate  } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Events from "./pages/Events";
+import Login from "./pages/Login";
+import Admin from "./pages/Admin";
+import "./app.css";
 
-export default function App() {
+const ProtectedRoute = ({ children }) => {
+  return localStorage.getItem("token") ? children : <Navigate to="/login" />;
+};
+
+function App() {
   return (
     <BrowserRouter>
-    <Navbar />
+      <Navbar />
       <Routes>
         <Route path="/" element={<Events />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
 }
+
+export default App;
+
