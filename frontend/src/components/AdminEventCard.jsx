@@ -1,13 +1,49 @@
 import EventForm from "./EventForm";
 import { deleteEvent } from "../api/eventApi";
+import { toast } from "react-toastify";
 
 export default function AdminEventCard({ event, isEditing, onEdit, onCancelEdit, refresh }) {
-  const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
-      await deleteEvent(event._id);
-      refresh();
-    }
+ const handleDelete = () => {
+    confirmDelete();
   };
+  const confirmDelete = () => {
+    toast(
+      ({ closeToast }) => (
+        <div>
+          <p className="font-semibold mb-2">
+            Are you sure you want to delete this event?
+          </p>
+          <div className="flex gap-2">
+            <button
+              className="px-3 py-1 bg-red-600 text-white rounded"
+              onClick={async () => {
+                try {
+                  await deleteEvent(event._id);
+                  toast.success("Event deleted successfully");
+                  refresh();
+                } catch {
+                  toast.error("Failed to delete event");
+                }
+                closeToast();
+              }}
+            >
+              Delete
+            </button>
+
+            <button
+              className="px-3 py-1 bg-gray-300 rounded"
+              onClick={closeToast}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      ),
+      { autoClose: false }
+    );
+  };
+
+
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">

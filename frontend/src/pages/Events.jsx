@@ -38,8 +38,11 @@ export default function Events() {
   const isMobile = window.innerWidth < 640;
 
   const hasEvents = (dateStr) => {
-    return allEvents.some((event) => event.date === dateStr);
-  };
+  return events.some(
+    (event) =>
+      new Date(event.date).toISOString().split("T")[0] === dateStr
+  );
+};
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -58,12 +61,31 @@ export default function Events() {
               right: "",
             }}
             dateClick={(info) => setSelectedDate(info.dateStr)}
-            dayCellClassNames={(arg) => {
-              const classes = ["cursor-pointer", "hover:bg-gray-100", "rounded"];
-              if (arg.dateStr === selectedDate) classes.push("bg-blue-100");
-              if (hasEvents(arg.dateStr)) classes.push("border-b-4", "border-blue-500"); // mark days with events
-              return classes.join(" ");
+            dayCellContent={(arg) => {
+              const hasEvent = hasEvents(arg.dateStr);
+              const isSelected = arg.dateStr === selectedDate;
+
+              return (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <span
+                    className={`text-sm ${
+                      isSelected ? "font-bold text-blue-700" : ""
+                    }`}
+                  >
+                    {arg.dayNumberText}
+                  </span>
+
+                  {hasEvent && (
+                    <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-1"></span>
+                  )}
+                </div>
+              );
             }}
+            dayCellClassNames={(arg) =>
+              arg.dateStr === selectedDate
+                ? "bg-blue-100 rounded cursor-pointer"
+                : "cursor-pointer hover:bg-gray-100"
+            }
           />
         </div>
 
