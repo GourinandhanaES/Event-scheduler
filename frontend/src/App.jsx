@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate  } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Events from "./pages/Events";
-import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import "./App.css";
 
@@ -15,9 +14,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Events />} />
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/admin"
+        <Route path="/admin"
           element={
             <ProtectedRoute>
               <Admin />

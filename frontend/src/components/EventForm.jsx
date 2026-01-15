@@ -1,39 +1,96 @@
-import { useState } from "react";
-import { createEvent } from "../api/eventApi";
+import { useState, useEffect } from "react";
+import { createEvent, updateEvent } from "../api/eventApi";
 
-export default function EventForm({ refresh }) {
+export default function EventForm({ refresh, editEvent }) {
   const [form, setForm] = useState({
     title: "",
     description: "",
     date: "",
     startTime: "",
-    endTime: ""
+    endTime: "",
   });
+
+  const isEdit = !!editEvent?._id;
+
+  useEffect(() => {
+    if (editEvent) setForm(editEvent);
+  }, [editEvent]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const submit = async (e) => {
+    
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createEvent(form);
-      alert("Event created successfully");
+      if (isEdit) {
+        await updateEvent(editEvent._id, form);
+        alert("Event updated successfully");
+      } else {
+        await createEvent(form);
+        alert("Event created successfully");
+      }
+      setForm({ title: "", description: "", date: "", startTime: "", endTime: "" });
       refresh();
     } catch (err) {
-      alert(err.response.data.message);
+      alert(err.response?.data?.message || "Error occurred");
     }
   };
 
   return (
-    <form onSubmit={submit} className="bg-white p-6 rounded-lg shadow space-y-4">
-      <input name="title" placeholder="Title" onChange={handleChange} className="input"/>
-      <input name="date" type="date" onChange={handleChange} className="input"/>
-      <input name="startTime" type="time" onChange={handleChange} className="input"/>
-      <input name="endTime" type="time" onChange={handleChange} className="input"/>
-      <textarea name="description" placeholder="Description" onChange={handleChange} className="input"/>
-      <button className="bg-indigo-600 text-white px-4 py-2 rounded">
-        Add Event
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white p-6 rounded-lg shadow-md space-y-4"
+    >
+      <h3 className="text-lg font-semibold">{isEdit ? "Edit Event" : "Add Event"}</h3>
+      <input
+        name="title"
+        placeholder="Title"
+        className="input w-full"
+        value={form.title}
+        onChange={handleChange}
+        required
+      />
+      <input
+        name="date"
+        type="date"
+        className="input w-full"
+        value={form.date}
+        onChange={handleChange}
+        required
+      />
+      <div className="flex gap-2">
+        <input
+          name="startTime"
+          type="time"
+          className="input w-1/2"
+          value={form.startTime}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="endTime"
+          type="time"
+          className="input w-1/2"
+          value={form.endTime}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <textarea
+        name="description"
+        placeholder="Description"
+        className="input w-full"
+        value={form.description}
+        onChange={handleChange}
+      />
+      <button
+        className={`w-full py-2 px-4 rounded text-white ${
+          isEdit ? "bg-yellow-600 hover:bg-yellow-700" : "bg-indigo-600 hover:bg-indigo-700"
+        }`}
+      >
+        {isEdit ? "Update Event" : "Add Event"}
       </button>
     </form>
   );
