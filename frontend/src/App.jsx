@@ -11,17 +11,21 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Events />} />
-        <Route path="/admin"
-          element={
-            <ProtectedRoute>
-              <Admin />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+      <div className="flex flex-col lg:flex-row h-screen bg-gray-50 overflow-hidden">
+        <Navbar />
+            <main className="flex-1 overflow-y-auto pb-16 lg:pb-0">
+              <Routes>
+                <Route path="/" element={<Events />} />
+                <Route path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <Admin />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </main>
+      </div>
     </BrowserRouter>
   );
 }
