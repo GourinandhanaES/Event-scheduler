@@ -18,7 +18,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
       const res = await loginAdmin(form);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("username", res.data.username);
-      toast.success(`Welcome back, ${res.data.username}!`);
+      toast.success(`Welcome back!`);
       onSuccess();   // close modal + redirect
     } catch(error) {
       toast.error("Invalid credentials");

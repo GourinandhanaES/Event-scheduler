@@ -3,6 +3,8 @@ import Navbar from "./components/Navbar";
 import Events from "./pages/Events";
 import Admin from "./pages/Admin";
 import "./App.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProtectedRoute = ({ children }) => {
   return localStorage.getItem("token") ? children : <Navigate to="/login" />;
@@ -11,6 +13,17 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   return (
     <BrowserRouter>
+      <ToastContainer 
+        position="top-center" 
+        autoClose={3000} 
+        hideProgressBar={false} 
+        newestOnTop={false} 
+        closeOnClick 
+        rtl={false} 
+        pauseOnFocusLoss 
+        draggable 
+        pauseOnHover 
+      />
       <div className="flex flex-col lg:flex-row h-screen bg-gray-50 overflow-hidden">
         <Navbar />
             <main className="flex-1 overflow-y-auto pb-16 lg:pb-0">

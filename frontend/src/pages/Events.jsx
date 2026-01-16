@@ -73,8 +73,8 @@ export default function Events() {
             <FullCalendar
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
-              height="auto"
-              contentHeight="auto"
+              height={isMobile ? 300 : "auto"}
+              contentHeight={isMobile ? 300 : "auto"}
               fixedWeekCount={false}
               headerToolbar={{
                 left: "prev",
